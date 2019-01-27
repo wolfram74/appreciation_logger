@@ -1,0 +1,23 @@
+user can create a field with a label that supports a value for each new day
+user can specify if the field is a string or a number
+user can specify if it can support null entries
+  view previous values for fields in table forms
+  specify if a field is part of a group of things (maintenance, self improvement, work, guitar)
+  view average value of fields where it's meaningful over some duration
+
+data structure:
+daily_logger_state
+  is a hash comprised of loggables
+loggable
+  is a hash comprised of a hash of details
+  and
+  an array of entries
+entry
+  is a date yyyy_mm_dd
+  and
+  a value
+details
+  type : entry value type
+  nullable : nullable tag
+  categories : array of grouping tags
+
