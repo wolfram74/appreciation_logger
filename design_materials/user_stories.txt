@@ -21,3 +21,23 @@ details
   nullable : nullable tag
   categories : array of grouping tags
 
+
+date vs epoch time vs epoch time cast to date
+date is conceptually easy to work with, but may prove programmatically difficult (including last 7 days near a boundary)
+epoch time is too discretized
+epoch time rounded to a day?
+  ms_per_day = 1000*3600*24
+  now = Date.now()
+  surplus = now%ms_per_day
+  new Date(now-surplus) -> UTC date, modifications after changeover would be for next day (in utah that would be 5pm)
+  =epoch_day
+
+desired behavior:
+  epoch day stays consistent from morning entries like weight and evening entries like total miles biked or read
+possible solution
+  on launch check for current_epoch_day in ms
+  if null, just set it, end
+  check for last_opened
+  if last_opened-Date.now() > 7 hours, reset current_epoch_day, end
+  if current_epoch_day - Date.now() > 24 hours, reset current_epoch_day, end
+  if 5 <= (Date.now()).getHours() <= 9, reset current_epoch_day //most
