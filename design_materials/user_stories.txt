@@ -39,7 +39,7 @@ desired behavior:
   epoch day stays consistent from morning entries like weight and evening entries like total miles biked or read
 possible solution
   on launch check for current_epoch_day in ms
-  if null, just set it, end
+  if null/0, just set it, end
   check for last_opened
   if last_opened-Date.now() > 7 hours, reset current_epoch_day, end
   if current_epoch_day - Date.now() > 24 hours, reset current_epoch_day, end

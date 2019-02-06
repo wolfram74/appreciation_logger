@@ -1,7 +1,14 @@
-function load(){
+function load(defaults){
+  var defaultVals = {
+    loggable:{},
+    settings:{currentEpochDay:0, daysReviewed:7, lastOpened:0}
+  }
+  if(typeof defaults !== undefined){
+    return defaultVals
+  }
   var loadedData = JSON.parse(
     localStorage.getItem('dailyLoggerState')
-    ) || {loggable:{}, settings:{currentEpochDay:0, daysReviewed:7, lastOpened:0}}
+    ) || defaultVals
   return loadedData
 }
 
@@ -12,5 +19,7 @@ function setCurrentEpochDay(){
   var surplus = now%msPerDay
   var dayNow = now-surplus
 }
+
+function mod(n,k){return ((n%k)+k)%k}
 
 new Vue({el: "#gratitude-body"})
