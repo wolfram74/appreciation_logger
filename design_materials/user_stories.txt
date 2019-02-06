@@ -6,8 +6,8 @@ user can specify if it can support null entries
   view average value of fields where it's meaningful over some duration
 
 data structure:
-daily_logger_state
-  is a hash comprised of loggables
+dailyLoggerState
+  is a hash comprised of loggables and settings
 loggable
   is a hash comprised of a hash of details
   and
@@ -20,6 +20,9 @@ details
   type : entry value type
   nullable : nullable tag
   categories : array of grouping tags
+settings
+  currentEpochDay
+  daysReviewed
 
 
 date vs epoch time vs epoch time cast to date
