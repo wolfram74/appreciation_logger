@@ -48,7 +48,7 @@ function genDevVals(){
           nullable:false,
           categories: []
         },
-        entries:[{date:twoDaysAgo, value:6}]
+        entries:[{date:twoDaysAgo, value:6},{date:dayNow, value:8}]
       },
     ],
     settings:{daysReviewed:7}

@@ -59,7 +59,7 @@ Vue.component('current-entry-fields',{
       <current-string v-for='(loggable, index) in logsByType.string'
         v-bind:key=index
         v-bind:loggable=loggable
-        v-bind:epochDate=this.epochDate
+        v-bind:epochDate=epochDate
       >
       </current-string>
     </ul>
@@ -87,8 +87,21 @@ Vue.component('current-string',{
   template:`
   <div class='current-string-entry'>
     <h3>{{loggable.details.label}}</h3>
+    <input v-model='currentEntry.value'>
   </div>
-  `
+  `,
+  computed:{
+    currentEntry:function(){
+      console.log(this.epochDate)
+      for(var index=this.loggable.entries.length-1;index >=0; index--){
+        var entry = this.loggable.entries[index]
+        if( entry.date=== this.epochDate ){return entry}
+      };
+      var newEntry = {date:this.epochDate, value:''}
+      this.loggable.entries.push(newEntry)
+      return newEntry
+    }
+  }
 })
 
 Vue.component('review-old-entries',{
