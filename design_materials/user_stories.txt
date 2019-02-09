@@ -20,6 +20,7 @@ entry
   a value
 details
   type : entry value type
+  label : what the user calls the loggable
   nullable : nullable tag
   categories : array of grouping tags
 settings
