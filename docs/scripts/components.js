@@ -1,7 +1,14 @@
-Vue.component('gratitude_body', {
+Vue.component('gratitude-body', {
   template:`
     <div>
-      hello
+      <new-loggable-form>
+      </new-loggable-form>
+
+      <current-entry-fields>
+      </current-entry-fields>
+
+      <review-old-entries>
+      </review-old-entries>
     </div>
   `,
   data: function(){
@@ -24,3 +31,28 @@ Vue.component('gratitude_body', {
 
 })
 
+Vue.component('new-loggable-form',{
+  template:`
+  <div class='new-loggable-div'>
+    <h3> new form goes here</h3>
+  </div>
+  `
+})
+
+Vue.component('current-entry-fields',{
+  template:`
+  <div class='current-entry-fields'>
+    <h3> current epoch days entries</h3>
+  </div>
+  `
+
+})
+
+Vue.component('review-old-entries',{
+  template:`
+  <div class='review-old-entries'>
+    <h3> old entries table</h3>
+  </div>
+  `
+
+})

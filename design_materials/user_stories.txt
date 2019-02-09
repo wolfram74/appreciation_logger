@@ -5,6 +5,8 @@ user can specify if it can support null entries
   specify if a field is part of a group of things (maintenance, self improvement, work, guitar)
   view average value of fields where it's meaningful over some duration
 
+current entry colored based on average and standard deviation
+
 data structure:
 dailyLoggerState
   is a hash comprised of loggables and settings
