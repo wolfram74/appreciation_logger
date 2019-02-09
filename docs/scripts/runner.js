@@ -1,7 +1,7 @@
 function load(defaults){
   var defaultVals = {
     loggable:{},
-    settings:{currentEpochDay:0, daysReviewed:7, lastOpened:0}
+    settings:{daysReviewed:7}
   }
   if(typeof defaults !== undefined){
     return defaultVals

@@ -4,9 +4,6 @@ function mainBodyGen(bodyData){
   var blockProxy = Vue.extend(Vue.options.components["gratitude_body"])
   return new blockProxy({propsData:bodyData})
 }
-  // var bodyWrapper = mount(Vue.options.components["gratitude_body"])
-  // bodyWrapper.setData(bodyData)
-  // return bodyWrapper
 
 describe("Meta Component", function() {
   it("should run tests",function(){

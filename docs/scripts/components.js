@@ -4,25 +4,23 @@ Vue.component('gratitude_body', {
       hello
     </div>
   `,
-  data: function(){return {state:load()}},
-  computed:{
-    currentEpochDay: function(){return 'fart'}
+  data: function(){
+    return {
+      state:load(),
+      temp:{dayOffSet:0}
+    }
   },
-  methods:{
-    setCurrentEpochDay: function(){
-      var msPerHour = 1000*60*60
-      var msPerDay =  msPerHour*24
+  computed:{
+    currentEpochDay: function(){
+      var msPerDay =  1000*60*60*24
       var now = Date.now()
       var surplus = now%msPerDay
-      var dayNow = now-surplus
-      console.log(this.state.settings.currentEpochDay)
-      var elapsed = now - this.state.settings.lastOpened
-      if(this.state.settings.currentEpochDay===0){this.state.settings.currentEpochDay = dayNow; return}
-      if( elapsed > 7*msPerHour){
-        this.state.settings.currentEpochDay = dayNow; return
-      }
-
-    },
+      var dayNow = now-surplus + msPerDay*this.temp.dayOffSet
+      return dayNow
+    }
+  },
+  methods:{
   }
 
 })
+
