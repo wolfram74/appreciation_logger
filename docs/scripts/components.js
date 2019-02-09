@@ -5,6 +5,9 @@ Vue.component('gratitude_body', {
     </div>
   `,
   data: function(){return {state:load()}},
+  computed:{
+    currentEpochDay: function(){return 'fart'}
+  },
   methods:{
     setCurrentEpochDay: function(){
       var msPerHour = 1000*60*60

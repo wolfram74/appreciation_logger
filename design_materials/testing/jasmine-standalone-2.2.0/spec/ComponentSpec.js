@@ -18,24 +18,8 @@ describe('current epoch day', function(){
   it('should determine the current epoch day from null results',function(){
     var defaultBody = mainBodyGen(load(true))
     // console.log(defaultBody.state.settings.currentEpochDay)
-    defaultBody.setCurrentEpochDay()
     // console.log(defaultBody.state.settings.currentEpochDay)
-    expect(defaultBody.state.settings.currentEpochDay).toBeGreaterThan(0)
-    expect(defaultBody.state.settings.currentEpochDay).toBeLessThan(Date.now())
-  })
-  it('should update current day if it too long has passed since last open',function(){
-    var data = load(true)
-    data.settings.currentEpochDay = Date.now() - 1000*60*60*12
-    var testBody = mainBodyGen(data)
-    console.log(data)
-    console.log(testBody.state.settings.currentEpochDay)
-    testBody.state.settings.currentEpochDay = Date.now() - 1000*60*60*12
-    console.log(testBody.state.settings.currentEpochDay)
-    testBody.setCurrentEpochDay()
-    console.log(testBody.state.settings.currentEpochDay)
-    expect(testBody.state.settings.currentEpochDay).toBeGreaterThan(0)
-    expect(testBody.state.settings.currentEpochDay).not.toBeGreaterThan(data.settings.currentEpochDay)
-    expect(testBody.state.settings.currentEpochDay).toBeLessThan(Date.now())
-
+    expect(defaultBody.currentEpochDay).toBeGreaterThan(Date.now()-1000*3600*24)
+    expect(defaultBody.currentEpochDay).toBeLessThan(Date.now())
   })
 })
