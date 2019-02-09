@@ -58,3 +58,4 @@ function genDevVals(){
 function mod(n,k){return ((n%k)+k)%k}
 
 new Vue({el: "#gratitude-body"})
+

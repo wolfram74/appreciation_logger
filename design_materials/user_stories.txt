@@ -15,7 +15,7 @@ loggable
   and
   an array of entries
 entry
-  is a date yyyy_mm_dd
+  is a date ms since 1900
   and
   a value
 details
