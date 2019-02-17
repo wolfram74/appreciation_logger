@@ -2,7 +2,7 @@ function humanDateYYMMDD(dayInMS){
   var dateObj = new Date(dayInMS)
   var year = dateObj.getYear()+1900
   var month = dateObj.getMonth()+1
-  var day = dateObj.getDate()
+  var day = dateObj.getUTCDate()
   return `${year}-${month}-${day}`
 }
 
@@ -63,6 +63,14 @@ Vue.component('current-entry-fields',{
       >
       </current-string>
     </ul>
+    <ul>
+      <current-number v-for='(loggable, index) in logsByType.number'
+        v-bind:key=index
+        v-bind:loggable=loggable
+        v-bind:epochDate=epochDate
+      >
+      </current-number>
+    </ul>
   </div>
   `,
   computed:{
@@ -88,6 +96,28 @@ Vue.component('current-string',{
   <div class='current-string-entry'>
     <h3>{{loggable.details.label}}</h3>
     <input v-model='currentEntry.value'>
+  </div>
+  `,
+  computed:{
+    currentEntry:function(){
+      console.log(this.epochDate)
+      for(var index=this.loggable.entries.length-1;index >=0; index--){
+        var entry = this.loggable.entries[index]
+        if( entry.date=== this.epochDate ){return entry}
+      };
+      var newEntry = {date:this.epochDate, value:''}
+      this.loggable.entries.push(newEntry)
+      return newEntry
+    }
+  }
+})
+
+Vue.component('current-number',{
+  props:['loggable', 'epochDate'],
+  template:`
+  <div class='current-string-entry'>
+    <h3>{{loggable.details.label}}</h3>
+    <input type=number v-model='currentEntry.value'>
   </div>
   `,
   computed:{
