@@ -189,16 +189,38 @@ Vue.component('number-table',{
       return out
     },
     rows: function(){
+/*
+newest entries are last index (last)
+looking for an entry that n-days old
+may:
+  not exist
+  may be at index last
+  may be last-(n+1) entries deep because of time zones
+*/
       var out= []
       console.log('tried')
       for(var daysAgo = 0; daysAgo <= this.settings.daysReviewed; daysAgo+=1){
-        console.log(out)
         var epochTime = this.epochDate-daysAgo*24*3600*1000
-        out.push(humanDateYYMMDD(epochTime))
+        var row = [humanDateYYMMDD(epochTime)]
         for(var index=0;index<this.numLogs.length; index++){
           var log = this.numLogs[index]
+          console.log(log, log.entries.length)
+          var found = false
+          var minInd = log.entries.length - (daysAgo+1)
+          for(var eIndex= log.entries.length-1; eIndex >=minInd ; eIndex -=1){
+            console.log(eIndex, daysAgo)
+            if(log.entries[eIndex]===undefined){continue}
+            if(log.entries[eIndex].date===epochTime){
+              row.push(log.entries[eIndex].value)
+              found = true
+              break
+            }
+          }
+          if(!found){row.push(0)}
         }
+        out.push(row)
       }
+      console.table(out)
       return out
     }
   }
