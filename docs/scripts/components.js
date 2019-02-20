@@ -176,8 +176,18 @@ fixing a row to having uniform height may require binding a row together
 Vue.component('number-table',{
   props:['numLogs', 'epochDate','settings'],
   template:`
-  <div>
+  <div class=number-table>
   hi, {{this.epochDate}}
+    <div class='header-row'>
+      <span v-for='(header, index) in headers'>
+        {{header}}
+      </span>
+    </div>
+    <div class='date-row' v-for='(rowData, index) in rows'>
+      <span v-for='(data, index) in rowData'>
+        {{data}}
+      </span>
+    </div>
   </div>
   `,
   computed:{
@@ -198,17 +208,14 @@ may:
   may be last-(n+1) entries deep because of time zones
 */
       var out= []
-      console.log('tried')
       for(var daysAgo = 0; daysAgo <= this.settings.daysReviewed; daysAgo+=1){
         var epochTime = this.epochDate-daysAgo*24*3600*1000
         var row = [humanDateYYMMDD(epochTime)]
         for(var index=0;index<this.numLogs.length; index++){
           var log = this.numLogs[index]
-          console.log(log, log.entries.length)
           var found = false
           var minInd = log.entries.length - (daysAgo+1)
           for(var eIndex= log.entries.length-1; eIndex >=minInd ; eIndex -=1){
-            console.log(eIndex, daysAgo)
             if(log.entries[eIndex]===undefined){continue}
             if(log.entries[eIndex].date===epochTime){
               row.push(log.entries[eIndex].value)
@@ -220,7 +227,6 @@ may:
         }
         out.push(row)
       }
-      console.table(out)
       return out
     }
   }
