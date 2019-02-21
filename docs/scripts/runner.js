@@ -34,6 +34,15 @@ function genDevVals(){
       },
       {
         details:{
+          type:'string',
+          label:'test str2',
+          nullable:false,
+          categories: []
+        },
+        entries:[{date:twoDaysAgo, value:'cats'},{date:dayNow, value:'bees'}]
+      },
+      {
+        details:{
           type:'number',
           label:'test num1',
           nullable:true,

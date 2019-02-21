@@ -9,12 +9,15 @@ function humanDateYYMMDD(dayInMS){
 Vue.component('gratitude-body', {
   template:`
     <div>
-      <new-loggable-form>
+      <new-loggable-form
+      v-on:submitCreate='parseForm'
+      >
       </new-loggable-form>
 
       <current-entry-fields
         v-bind:loggablesData=this.state.loggables
         v-bind:epochDate = this.currentEpochDay
+
       >
       </current-entry-fields>
 
@@ -42,16 +45,55 @@ Vue.component('gratitude-body', {
     }
   },
   methods:{
+    parseForm:function(formData){
+      console.log('submission entered')
+      console.log(formData)
+      this.state.loggables.push(formData)
+    }
   }
 
 })
 
 Vue.component('new-loggable-form',{
   template:`
-  <div class='new-loggable-div'>
-    <h3> new form goes here</h3>
-  </div>
-  `
+  <form class='new-loggable-form'>
+    <span> What label would you like to give the new log?</span>
+    <input type = 'text' v-model='details.label'>
+    <div class='type-select'>
+      <span> This new log is tracking a </span>
+      <br>
+      <input type="radio" id="t_num" value="number" v-model="details.type">
+      <label for="t_num">Number</label>
+      <br>
+      <input type="radio" id="t_str" value="string" v-model="details.type">
+      <label for="t_str">String</label>
+      <br>
+    </div>
+    <button
+      v-on:click='finishCreate'>
+      Go!
+    </button>
+
+  </form>
+  `,
+  data: function(){
+    return {
+      details:{
+        label:'',type:'number',
+        nullable:false,categories:[]
+      },
+      entries:[]
+    }
+  },
+  methods:{
+    finishCreate:function(event){
+      event.preventDefault()
+      var outputData = JSON.parse(JSON.stringify(this.$data))
+      console.log(outputData,'attempting emission')
+      this.$emit('submitCreate', outputData)
+
+    }
+  }
 })
 
 Vue.component('current-entry-fields',{
@@ -119,7 +161,7 @@ Vue.component('current-string',{
 Vue.component('current-number',{
   props:['loggable', 'epochDate'],
   template:`
-  <div class='current-string-entry'>
+  <div class='current-number-entry'>
     <h3>{{loggable.details.label}}</h3>
     <input type=number v-model='currentEntry.value'>
   </div>
@@ -140,20 +182,26 @@ Vue.component('current-number',{
 
 Vue.component('review-old-entries',{
   props:['loggablesData','epochDate', 'settings'],
-/*
-strings get their own section, line per date, maybe a different number of columns based on width of screen
-numbers get column per entry
-fixing a row to having uniform height may require binding a row together
-*/
+  /*
+  strings get their own section, line per date, maybe a different number of columns based on width of screen
+  numbers get column per entry
+  fixing a row to having uniform height may require binding a row together
+  */
   template:`
   <div class='review-old-entries'>
-    <h3> old entries table</h3>
+    <h2> old entries table</h2>
     <number-table
       v-bind:numLogs = this.logsByType.number
       v-bind:settings = this.settings
       v-bind:epochDate = this.epochDate
     >
     </number-table>
+    <string-table
+      v-bind:strLogs = this.logsByType.string
+      v-bind:settings = this.settings
+      v-bind:epochDate = this.epochDate
+      >
+    </string-table>
   </div>
   `,
   computed:{
@@ -176,15 +224,15 @@ fixing a row to having uniform height may require binding a row together
 Vue.component('number-table',{
   props:['numLogs', 'epochDate','settings'],
   template:`
-  <div class=number-table>
-  hi, {{this.epochDate}}
+  <div class='number-table'>
+  <h3>Numerical Entries</h3>
     <div class='header-row'>
-      <span v-for='(header, index) in headers'>
+      <span class='table-cell' v-for='(header, index) in headers'>
         {{header}}
       </span>
     </div>
     <div class='date-row' v-for='(rowData, index) in rows'>
-      <span v-for='(data, index) in rowData'>
+      <span class='table-cell' v-for='(data, index) in rowData'>
         {{data}}
       </span>
     </div>
@@ -199,14 +247,14 @@ Vue.component('number-table',{
       return out
     },
     rows: function(){
-/*
-newest entries are last index (last)
-looking for an entry that n-days old
-may:
-  not exist
-  may be at index last
-  may be last-(n+1) entries deep because of time zones
-*/
+      /*
+      newest entries are last index (last)
+      looking for an entry that n-days old
+      may:
+        not exist
+        may be at index last
+        may be last-(n+1) entries deep because of time zones
+      */
       var out= []
       for(var daysAgo = 0; daysAgo <= this.settings.daysReviewed; daysAgo+=1){
         var epochTime = this.epochDate-daysAgo*24*3600*1000
@@ -226,6 +274,49 @@ may:
           if(!found){row.push(0)}
         }
         out.push(row)
+      }
+      return out
+    }
+  }
+})
+
+Vue.component('string-table',{
+  props:['strLogs', 'epochDate','settings'],
+  template:`
+  <div class='string-table'>
+    <h3>String Entries</h3>
+    <div class='string-col' v-for='(log, index) in strLogs'>
+      <div class='string-header'>
+        {{log.details.label}}
+      </div>
+      <div class='string-cell' v-for='(entry, index2) in columns[index]'>
+        <span>{{entry[0]}}</span>
+        <span>{{entry[1]}}</span>
+      </div>
+    </div>
+  </div>
+  `,
+  computed:{
+    columns:function(){
+      var out = []
+      for(var ind=0; ind < this.strLogs.length; ind+=1){
+        var log = this.strLogs[ind]
+        var col = []
+        for(var daysAgo = 0; daysAgo<this.settings.daysReviewed; daysAgo+=1){
+          var epochTime = this.epochDate-daysAgo*24*3600*1000
+          var found = false
+          var minInd = log.entries.length - (daysAgo+1)
+          for(var eIndex= log.entries.length-1; eIndex >=minInd ; eIndex -=1){
+            if(log.entries[eIndex]===undefined){continue}
+            if(log.entries[eIndex].date===epochTime){
+              col.push([humanDateYYMMDD(epochTime), log.entries[eIndex].value])
+              found = true
+              break
+            }
+          }
+          if(!found){col.push([humanDateYYMMDD(epochTime), ''])}
+        }
+      out.push(col)
       }
       return out
     }
