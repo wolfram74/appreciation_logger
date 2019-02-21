@@ -285,13 +285,15 @@ Vue.component('string-table',{
   template:`
   <div class='string-table'>
     <h3>String Entries</h3>
-    <div class='string-col' v-for='(log, index) in strLogs'>
-      <div class='string-header'>
-        {{log.details.label}}
-      </div>
-      <div class='string-cell' v-for='(entry, index2) in columns[index]'>
-        <span>{{entry[0]}}</span>
-        <span>{{entry[1]}}</span>
+    <div class='string-col-container'>
+      <div class='string-col' v-for='(log, index) in strLogs'>
+        <div class='string-header'>
+          {{log.details.label}}
+        </div>
+        <div class='string-cell' v-for='(entry, index2) in columns[index]'>
+          <span>{{entry[0]}}</span>
+          <span>{{entry[1]}}</span>
+        </div>
       </div>
     </div>
   </div>

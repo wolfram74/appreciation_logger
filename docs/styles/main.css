@@ -1,0 +1,36 @@
+.number-table .date-row{
+	display:flex;
+}
+.number-table .header-row{
+	display:flex;
+}
+.number-table .table-cell{
+	border:black solid 1px;
+	display:inline-block;
+	width: 5em;
+	border-radius: .15em;
+	margin: .02em;
+}
+
+.string-col-container{
+	display: flex;
+	flex-wrap: wrap;
+}
+.string-col {
+  border: black solid;
+  width: 23%;
+  flex-grow: 0;
+  margin: .5%;
+}
+
+
+@media screen and (max-width: 800px) {
+    .string-col {
+      width: 47%;
+    }
+}
+@media screen and (max-width: 600px) {
+    .string-col {
+      width: 90%;
+    }
+}
