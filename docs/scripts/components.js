@@ -101,7 +101,7 @@ Vue.component('current-entry-fields',{
   template:`
   <div class='current-entry-fields'>
     <h3> fill in entries for the days date: {{readableDate}}</h3>
-    <ul>
+    <ul class='string-entry'>
       <current-string v-for='(loggable, index) in logsByType.string'
         v-bind:key=index
         v-bind:loggable=loggable
@@ -109,7 +109,7 @@ Vue.component('current-entry-fields',{
       >
       </current-string>
     </ul>
-    <ul>
+    <ul class='number-entry'>
       <current-number v-for='(loggable, index) in logsByType.number'
         v-bind:key=index
         v-bind:loggable=loggable

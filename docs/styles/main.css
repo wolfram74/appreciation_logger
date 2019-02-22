@@ -1,3 +1,7 @@
+.number-entry{
+	display: flex;
+}
+
 .number-table .date-row{
 	display:flex;
 }
