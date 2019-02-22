@@ -17,7 +17,7 @@ Vue.component('gratitude-body', {
       <current-entry-fields
         v-bind:loggablesData=this.state.loggables
         v-bind:epochDate = this.currentEpochDay
-
+        v-on:change='saveState'
       >
       </current-entry-fields>
 
@@ -49,6 +49,10 @@ Vue.component('gratitude-body', {
       console.log('submission entered')
       console.log(formData)
       this.state.loggables.push(formData)
+    },
+    saveState:function(){
+      console.log('save triggered')
+      if(!devMode){save(this.state)}
     }
   }
 
@@ -141,7 +145,10 @@ Vue.component('current-string',{
   template:`
   <div class='current-string-entry'>
     <h3>{{loggable.details.label}}</h3>
-    <input v-model='currentEntry.value'>
+    <input
+    v-model='currentEntry.value'
+    v-on:change="$emit('change')"
+    >
   </div>
   `,
   computed:{
@@ -163,7 +170,11 @@ Vue.component('current-number',{
   template:`
   <div class='current-number-entry'>
     <h3>{{loggable.details.label}}</h3>
-    <input type=number v-model='currentEntry.value'>
+    <input
+      type=number
+      v-model='currentEntry.value'
+      v-on:change="$emit('change')"
+      >
   </div>
   `,
   computed:{

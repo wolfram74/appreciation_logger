@@ -1,18 +1,27 @@
+var devMode = true
 function load(defaults){
   var defaultVals = {
     loggables:[],
     settings:{daysReviewed:7}
   }
   var devVals = genDevVals()
+  if(devMode){return devVals}
   if(typeof defaults === 'undefined'){var noDefaults=true}
   if(!noDefaults){
+    console.log("didn't load")
     return defaultVals
   }
-  console.log('not default')
   var loadedData = JSON.parse(
     localStorage.getItem('dailyLoggerState')
-    ) || devVals;
+    ) || defaultVals;
   return loadedData
+}
+
+function save(stateObject){
+  console.log('save triggered')
+  localStorage.setItem('dailyLoggerState',
+    JSON.stringify(stateObject)
+  )
 }
 
 function genDevVals(){
