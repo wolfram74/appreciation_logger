@@ -18,6 +18,7 @@ Vue.component('gratitude-body', {
         v-bind:loggablesData=this.state.loggables
         v-bind:epochDate = this.currentEpochDay
         v-on:change.native='saveState'
+        v-on:shiftDay='shiftDay'
       >
       </current-entry-fields>
 
@@ -53,6 +54,9 @@ Vue.component('gratitude-body', {
     saveState:function(){
       console.log('save triggered')
       if(!devMode){save(this.state)}
+    },
+    shiftDay:function(direction){
+      this.temp.dayOffSet += direction
     }
   }
 
@@ -104,7 +108,19 @@ Vue.component('current-entry-fields',{
   props:['loggablesData', 'epochDate'],
   template:`
   <div class='current-entry-fields'>
-    <h3> fill in entries for the days date: {{readableDate}}</h3>
+    <div class='current-day-header'>
+      <h3>
+      fill in entries for the days date: {{readableDate}}
+      </h3>
+      <button
+        v-on:click="$emit('shiftDay', 1)">
+        +1 day
+      </button>
+      <button
+        v-on:click="$emit('shiftDay', -1)">
+        -1 day
+      </button>
+    </div>
     <ul class='string-entry'>
       <current-string v-for='(loggable, index) in logsByType.string'
         v-bind:key=index
@@ -144,7 +160,7 @@ Vue.component('current-string',{
   props:['loggable', 'epochDate'],
   template:`
   <div class='current-string-entry'>
-    <h3>{{loggable.details.label}}</h3>
+    <h4>{{loggable.details.label}}</h4>
     <input
     v-model='currentEntry.value'
     >
@@ -168,7 +184,7 @@ Vue.component('current-number',{
   props:['loggable', 'epochDate'],
   template:`
   <div class='current-number-entry'>
-    <h3>{{loggable.details.label}}</h3>
+    <h4>{{loggable.details.label}}</h4>
     <input
       type=number
       v-model='currentEntry.value'
@@ -271,7 +287,8 @@ Vue.component('number-table',{
         for(var index=0;index<this.numLogs.length; index++){
           var log = this.numLogs[index]
           var found = false
-          var minInd = log.entries.length - (daysAgo+1)
+          //2 instead of 1 for handling date offsets, might generalize
+          var minInd = log.entries.length - (daysAgo+2)
           for(var eIndex= log.entries.length-1; eIndex >=minInd ; eIndex -=1){
             if(log.entries[eIndex]===undefined){continue}
             if(log.entries[eIndex].date===epochTime){
