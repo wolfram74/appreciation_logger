@@ -1,4 +1,4 @@
-var devMode = true
+var devMode = false
 function load(defaults){
   var defaultVals = {
     loggables:[],
