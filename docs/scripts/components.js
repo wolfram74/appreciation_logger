@@ -110,7 +110,7 @@ Vue.component('current-entry-fields',{
   <div class='current-entry-fields'>
     <div class='current-day-header'>
       <h3>
-      fill in entries for the days date: {{readableDate}}
+      fill in entries for the days date: {{readableDate}} ({{dayType}})
       </h3>
       <button
         v-on:click="$emit('shiftDay', 1)">
@@ -141,6 +141,12 @@ Vue.component('current-entry-fields',{
   `,
   computed:{
     readableDate:function(){return humanDateYYMMDD(this.epochDate)},
+    dayType:function(){
+      var dayNum = this.epochDate/(3600*24*1000)
+      var mod2 = [0, 1]
+      var mod3 = ['A','B','C']
+      return mod3[dayNum%3]+mod2[dayNum%2]
+    },
     logsByType:function(){
       var strings = []
       var numbers = []
